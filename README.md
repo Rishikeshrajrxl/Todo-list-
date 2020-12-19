@@ -1,7 +1,7 @@
 # Todo-list 
 
-<h4> A Command line program to help you manage your todo list.</h4>
-## Specification
+<h4> A Command line program to help you manage your todo list.</h4><br/>
+<h1>Specification</h1>
 
 1. The app can be run in the console with `./todo`.
 
