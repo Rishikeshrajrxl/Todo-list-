@@ -105,32 +105,99 @@ void del(int num)
     count--;
     fin.close();
 
+   if(num<=count && num>=1)
+   {
+        fin.open("todo.txt");
+        int i=0;
+        while(i<count)
+        {
+            fin.getline(line,50);
+            v.push_back(line);
+            i++;
+        }
+        fin.close();
+
+        int diff=count-num;
+        vector<string>::iterator itr;
+        itr=v.begin();
+        itr+=diff;
+        v.erase(itr);
+
+        ofstream fout;
+        fout.open("todo.txt",ios::out);
+
+        for(auto i=v.begin();i!=v.end();i++)
+        {
+            fout<<*i;
+            if((i+1)!=v.end())
+                fout<<"\n";
+        }
+        fout.close();
+        cout<<"Deleted todo #"<<num;
+   }
+   else{
+    cout<<"Error: todo #"<<num<<" does not exist. Nothing deleted.";
+   }
+
+}
+
+//done : function to complete the todo
+void done(int num)
+{
+    vector<string>v;
+    int count=0;
+    char line[50];
+    ifstream fin;
     fin.open("todo.txt");
-    int i=0;
-    while(i<count)
+    while(fin)
     {
         fin.getline(line,50);
-        v.push_back(line);
-        i++;
+        count++;
     }
+    count--;
     fin.close();
 
-    int diff=count-num;
-    vector<string>::iterator itr;
-    itr=v.begin();
-    itr+=diff;
-    v.erase(itr);
+   if(num<=count && num>=1)
+   {
+        fin.open("todo.txt");
+        int i=0;
+        while(i<count)
+        {
+            fin.getline(line,50);
+            v.push_back(line);
+            i++;
+        }
+        fin.close();
 
-    ofstream fout;
-    fout.open("todo.txt",ios::out);
+        int diff=count-num;
+        vector<string>::iterator itr;
+        itr=v.begin();
+        itr+=diff;
 
-    for(auto i=v.begin();i!=v.end();i++)
-    {
-        fout<<*i;
-        if((i+1)!=v.end())
-            fout<<"\n";
-    }
+        ofstream f1;
+        f1.open("done.txt",ios::app);
+        if(f1.tellp()!=0)
+            f1<<"\n";
+        f1<<*itr;
+
+        v.erase(itr);
+
+        ofstream fout;
+        fout.open("todo.txt",ios::out);
+
+        for(auto i=v.begin();i!=v.end();i++)
+        {
+            fout<<*i;
+            if((i+1)!=v.end())
+                fout<<"\n";
+        }
         fout.close();
+        cout<<"Marked todo #"<<num<<" as done";
+   }
+   else{
+    cout<<"Error: todo #"<<num<<" does not exist.";
+   }
+
 }
 
 int main(int argc, char* argv[])
@@ -174,6 +241,18 @@ int main(int argc, char* argv[])
                num=num*10+k;
            }
         del(num);
+    }
+    else if(argv1=="done")
+    {
+        //converting string into integer value.
+        std::string argv2=argv[2];
+            int num=0;
+           for(int i=0;i<argv2.length();i++)
+           {
+               int k=argv2[i]-48;
+               num=num*10+k;
+           }
+        done(num);
     }
 
     return 0;
