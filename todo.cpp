@@ -28,9 +28,8 @@ void add(string name)
 
     int count=0;
     char line[100];
-    while(!fin.eof())
+    while( fin.getline(line,50))
     {
-        fin.getline(line,50);
         q.push(line);
         count++;
     }
@@ -59,9 +58,8 @@ void ls()
      int count=0;
 
      //counting all the todos
-     while(!fin.eof())
+     while(fin.getline(line,50))
     {
-         fin.getline(line,50);
          count++;
     }
     fin.close();
@@ -97,12 +95,10 @@ void del(int num)
     char line[50];
     ifstream fin;
     fin.open("todo.txt");
-    while(fin)
+    while(fin.getline(line,50))
     {
-        fin.getline(line,50);
         count++;
     }
-    count--;
     fin.close();
 
    if(num<=count && num>=1)
@@ -149,12 +145,10 @@ void done(int num)
     char line[50];
     ifstream fin;
     fin.open("todo.txt");
-    while(fin)
+    while( fin.getline(line,50))
     {
-        fin.getline(line,50);
         count++;
     }
-    count--;
     fin.close();
 
    if(num<=count && num>=1)
@@ -174,12 +168,22 @@ void done(int num)
         itr=v.begin();
         itr+=diff;
 
+        ifstream fr;
+        fr.open("done.txt",ios::in);
+        char ch[50];
+        int k=0;
+        while(fr.getline(ch,50))
+        {
+            k++;
+        }
+        fr.close();
+
         ofstream f1;
-        f1.open("done.txt",ios::app);
-        if(f1.tellp()!=0)
+        f1.open("done.txt",ios::out|ios::app);
+        if(k!=0)
             f1<<"\n";
         f1<<*itr;
-
+        f1.close();
         v.erase(itr);
 
         ofstream fout;
@@ -200,6 +204,34 @@ void done(int num)
 
 }
 
+void report()
+{
+     ifstream fin;
+     fin.open("todo.txt",ios::in);
+
+     char line[50];
+     int todo=0;
+
+     //counting all the todos
+     while( fin.getline(line,50))
+    {
+         todo++;
+    }
+    fin.close();
+    fin.open("done.txt",ios::in);
+
+     char ln[50];
+     int dn=0;
+
+     //counting all the todos
+     while(fin.getline(ln,50))
+    {
+         dn++;
+    }
+    cout<<"Pending : "<<todo<<" Completed : "<<dn;
+    fin.close();
+
+}
 int main(int argc, char* argv[])
 {
 
@@ -253,6 +285,10 @@ int main(int argc, char* argv[])
                num=num*10+k;
            }
         done(num);
+    }
+    else if(argv1=="report")
+    {
+        report();
     }
 
     return 0;
