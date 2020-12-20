@@ -3,18 +3,28 @@
 #include<string>
 #include<iomanip>
 #include<queue>
+#include<time.h>
 using namespace std;
+#define DTTMFMT "%Y-%m-%d"
+#define DTTMSZ 21
+
+static char *getDtTm(char*buff){
+    time_t t=time(0);
+    strftime(buff,DTTMSZ, DTTMFMT, localtime(&t));
+    return buff;
+}
+
 
 //help : Shows the usage
 void help()
 {
-    cout<<"Usage :-"<<endl;
-    cout<<" $ ./todo add \"todo item \"     # Add a new todo"<<endl;
-    cout<<" $ ./todo ls                   # Show remaining todos"<<endl;
-    cout<<" $ ./todo del NUMBER           # Delete a todo"<<endl;
-    cout<<" $ ./todo done NUMBER          # Complete a todo"<<endl;
-    cout<<" $ ./todo help                 # Show usage"<<endl;
-    cout<<" $ ./todo report               # Statistics";
+    cout<<"Usage :-";
+    cout<<"\n$ ./todo add \"todo item \" # Add a new todo";
+    cout<<"\n$ ./todo ls               # Show remaining todos";
+    cout<<"\n$ ./todo del NUMBER       # Delete a todo";
+    cout<<"\n$ ./todo done NUMBER      # Complete a todo";
+    cout<<"\n$ ./todo help             # Show usage";
+    cout<<"\n$ ./todo report           # Statistics";
 }
 //add : Add a new todo
 /* For adding new todo item in the beginning
@@ -38,12 +48,12 @@ void add(string name)
     ofstream fout;
     fout.open("todo.txt");
     fout<<name;
-    while(count--)
+    while(!q.empty())
     {
         fout<<"\n"<<q.front();
         q.pop();
     }
-    cout<<"Added todo : "<<"\""<<name<<"\"";
+    cout<<"Added todo: "<<"\""<<name<<"\"";
     fout.close();
 
 }
@@ -80,10 +90,11 @@ void ls()
             i++;
 
         }
+        cout<<endl;
         fin.close();
     }
     else{
-        cout<<"List is Empty";
+        cout<<"There are no pending todos!";
     }
 }
 
@@ -196,7 +207,7 @@ void done(int num)
                 fout<<"\n";
         }
         fout.close();
-        cout<<"Marked todo #"<<num<<" as done";
+        cout<<"Marked todo #"<<num<<" as done.";
    }
    else{
     cout<<"Error: todo #"<<num<<" does not exist.";
@@ -228,12 +239,14 @@ void report()
     {
          dn++;
     }
-    cout<<"Pending : "<<todo<<" Completed : "<<dn;
+    char buff[DTTMSZ];
+    cout<< getDtTm(buff)<<" Pending : "<<todo<<" Completed : "<<dn;
     fin.close();
 
 }
 int main(int argc, char* argv[])
 {
+
 
         std::string argv1;
         //checking if it has more than 1 text in command line
@@ -250,41 +263,61 @@ int main(int argc, char* argv[])
     // calling the add command
     else if(argv1=="add")
     {
-        std::string name="";
-        for(int i=2;i<argc;i++)
-        {
-            name=name+argv[i];
-            if(argv[i+1]!=NULL)
-               name+=" ";
-        }
-        add(name);
+         if(argc==2)
+           cout<<"Error: Missing todo string. Nothing added!";
+         else
+         {
+                std::string name="";
+                for(int i=2;i<argc;i++)
+                {
+                    name=name+argv[i];
+                    if(argv[i+1]!=NULL)
+                    name+=" ";
+                }
+                add(name);
+
+         }
+
     }
     // calling the ls command
     else if(argv1=="ls")
         ls();
      else if(argv1=="del")
     {
-        //converting string into integer value.
-        std::string argv2=argv[2];
-            int num=0;
-           for(int i=0;i<argv2.length();i++)
-           {
+         if(argc==2)
+           cout<<"Error: Missing NUMBER for deleting todo.";
+         else
+         {
+            //converting string into integer value.
+             std::string argv2=argv[2];
+             int num=0;
+             for(int i=0;i<argv2.length();i++)
+             {
                int k=argv2[i]-48;
                num=num*10+k;
-           }
-        del(num);
+             }
+             del(num);
+         }
+
     }
     else if(argv1=="done")
     {
-        //converting string into integer value.
-        std::string argv2=argv[2];
-            int num=0;
-           for(int i=0;i<argv2.length();i++)
-           {
+        if(argc==2)
+           cout<<"Error: Missing NUMBER for marking todo as done.";
+        else
+        {
+            //converting string into integer value.
+              std::string argv2=argv[2];
+
+             int num=0;
+             for(int i=0;i<argv2.length();i++)
+             {
                int k=argv2[i]-48;
                num=num*10+k;
-           }
-        done(num);
+             }
+             done(num);
+        }
+
     }
     else if(argv1=="report")
     {
