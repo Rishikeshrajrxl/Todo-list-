@@ -67,7 +67,7 @@ void ls()
     fin.close();
 
     //printing all the to-dos in reverse order
-    count-=1;
+
     if(count>0)
     {
         fin.open("todo.txt",ios::in);
