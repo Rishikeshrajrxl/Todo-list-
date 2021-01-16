@@ -1,6 +1,10 @@
-# Todo-list 
+# Command Line Todo List
+[![GitHub license](https://img.shields.io/github/license/FOSS-Cell-GECPKD/Todo-List?style=for-the-badge)](https://github.com/FOSS-Cell-GECPKD/Todo-List/blob/master/LICENSE)
 
-<h4> A Command line program to help you manage your todo list.</h4><br/>
+In this project our aim is to implement a command-line (CLI) program that lets you manage your todos.
+Here's how it should work when you're done:
+
+![Demo of usage](https://raw.githubusercontent.com/FOSS-Cell-GECPKD/Todo-List/main/ezgif.com-gif-maker_cls%20todo-list.gif)
 <h1>Specification</h1>
 
 1. The app can be run in the console with `./todo`.
